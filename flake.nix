@@ -94,12 +94,17 @@
   } @ inputs: let
     username = "michzuerch";
     system = "x86_64-linux";
+    systems = ["x86_64-linux"];
     pkgs = import nixpkgs {
       inherit system;
       config.allowUnfree = true;
     };
     lib = nixpkgs.lib;
+    forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs systems (system: import nixpkgs {inherit system;});
   in {
+    formatter = forEachSystem (pkgs: pkgs.alejandra);
+
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         inherit system;

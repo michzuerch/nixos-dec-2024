@@ -3,16 +3,13 @@
   pkgs,
   host,
   ...
-}:
-{
+}: {
   home.packages = (
-    with pkgs;
-    [
+    with pkgs; [
       (
-        if (host == "laptop") then
-          inputs.zen-browser.packages."${system}".generic
-        else
-          inputs.zen-browser.packages."${system}".specific
+        if (host == "laptop")
+        then inputs.zen-browser.packages."${system}".generic
+        else inputs.zen-browser.packages."${system}".specific
       )
     ]
   );
